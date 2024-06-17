@@ -24,8 +24,7 @@ class Block{
     this.block.receiveShadow = true;
 
     this.block.position.x = this.x;
-    this.block.position.y = this.y;
-    this.block.position.z = this.z;
+    this.block.position.z = this.y;
 
     scene.add(this.block);
   }
@@ -36,22 +35,46 @@ class Block{
     let iny;
     let inxnext;
     let inynext;
-    let angle = Math.atan2(player.y - this.y, player.x - this.x);
+    let angle = Math.atan2(player.y - this.y, player.x - this.x)*Math.PI/4;
     if(player.x + hw > this.x-0.5 && player.x - hw < this.x + 0.5){
       inx = true;
     }
     if(player.y + hw > this.y-0.5 && player.y - hw < this.y + 0.5){
       iny = true;
     }
-    if(player.dir === player.inputDir){
-      if(player.nextx + hw > this.x - 0.5 && player.nextx - hw < this.x + 0.5){
-        inxnext = true;
-      }
-      if(player.nexty + hw > this.y - 0.5 && player.nexty - hw < this.y + 0.5){
-        inynext = true;
+    if(player.nextx + hw > this.x - 0.5 && player.nextx - hw < this.x + 0.5){
+      inxnext = true;
+    }
+    if(player.nexty + hw > this.y - 0.5 && player.nexty - hw < this.y + 0.5){
+      inynext = true;
+    }
+
+    if(!inx && iny && inxnext && inynext){
+      if(player.x < this.x){
+        player.nextx = this.x - 0.5 - hw;
+      } else {
+        player.nextx = this.x + 0.5 + hw;
       }
     }
-    
+    if(inx && !iny && inxnext && inynext){
+      if(player.y < this.y){
+        player.nexty = this.y - 0.5 - hw;
+      } else {
+        player.nexty = this.y + 0.5 + hw;
+      }
+    }
+
+    if(!inx && !iny && inxnext && inynext){
+      if(angle < 1 || angle >= 7){
+        player.nexty = this.y - 0.5 - hw;
+      } else if(angle < 3){
+        player.nextx = this.x - 0.5 - hw;
+      } else if(angle < 5){
+        player.nexty = this.y + 0.5 + hw;
+      } else if(angle < 7){
+        player.nextx = this.x + 0.5 + hw;
+      }
+    }
     
   }
 }
